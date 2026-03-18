@@ -1,0 +1,33 @@
+- name: Login acr
+  containers.podman.podman_login:
+    registry: "{{ acr_login_server }}"
+    username: "{{ acr_username }}"
+    password: "{{ acr_password }}"
+
+- name: Pull Nginx
+  containers.podman.podman_image:
+    name: docker.io/library/nginx
+    tag: latest
+
+- name: Tag image
+  command: >
+    podman tag docker.io/library/nginx:latest
+    {{ acr_login_server }}/nginx:latest
+
+- name: Push image
+  command: >
+    podman push {{ acr_login_server }}/nginx:latest
+
+- name: Pull redis
+  containers.podman.podman_image:
+    name: docker.io/library/redis
+    tag: latest
+
+- name: Tag redis
+  command: >
+    podman tag docker.io/library/redis:latest
+    {{ acr_login_server }}/redis:latest
+
+- name: Push redis
+  command: >
+    podman push {{ acr_login_server }}/redis:latest

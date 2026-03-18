@@ -1,0 +1,21 @@
+- name: Setup ACR and push images
+  hosts: localhost
+  vars_files:
+    - secrets.yml
+  roles:
+    - acr
+
+- name: Setup VM with Podman
+  hosts: vm
+  become: yes
+  vars_files:
+    - secrets.yml
+  roles:
+    - vm
+
+- name: Deploy app to AKS
+  hosts: localhost
+  vars_files:
+    - secrets.yml
+  roles:
+    - aks

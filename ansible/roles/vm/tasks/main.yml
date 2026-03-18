@@ -1,0 +1,28 @@
+- name: Update apt
+  apt:
+    update_cache: yes
+
+- name: Install Podman
+  apt:
+    name: podman
+    state: present
+
+- name: Login to ACR
+  containers.podman.podman_login:
+    registry: "{{ acr_login_server }}"
+    username: "{{ acr_username }}"
+    password: "{{ acr_password }}"
+
+- name: Pull image
+  containers.podman.podman_image:
+    name: "{{ acr_login_server }}/nginx"
+    tag: latest
+
+- name: Run container
+  containers.podman.podman_container:
+    name: webserver
+    image: "{{ acr_login_server }}/nginx:latest"
+    state: started
+    recreate: true
+    ports:
+      - "8080:80"

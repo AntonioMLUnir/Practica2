@@ -1,0 +1,4 @@
+ansible/id_rsa.pem
+ansible/secrets.yml
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
